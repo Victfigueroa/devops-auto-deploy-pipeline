@@ -1,14 +1,14 @@
-name: Pipeline de CI/CD - MAIN - Víctor Figueroa
+name: Pipeline de CI/CD - DEV - Víctor Figueroa
 
 on:
   pull_request:
-    branches: [main]
+    branches: [dev]
   push:
-    branches: [main]
+    branches: [dev]
 
 jobs:
   validate:
-    name: 1. Validar Calidad del Código - MAIN
+    name: 1. Validar Calidad del Código - DEV
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
@@ -26,7 +26,7 @@ jobs:
           npm run test
 
   automerge:
-    name: 2. Fusionar PR - MAIN
+    name: 2. Fusionar PR - DEV
     needs: validate
     if: github.event_name == 'pull_request' && needs.validate.result == 'success' && github.event.pull_request.draft == false
     runs-on: ubuntu-latest
@@ -42,9 +42,9 @@ jobs:
           MERGE_LABELS: ""
 
   deploy:
-    name: 3. Desplegar en GitHub Pages - MAIN
+    name: 3. Desplegar en GitHub Pages - DEV
     needs: validate
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.validate.result == 'success'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev' && needs.validate.result == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: read
